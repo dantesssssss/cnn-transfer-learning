@@ -71,10 +71,9 @@ def build_cnn(augment=False):
 
 
 def build_transfer(augment=False):
-
     # creating mobilenet_v2 without head
     backbone = MobileNetV2(weights="imagenet", include_top=False,
-                                               input_shape=(IMG_SIZE, IMG_SIZE, 3), pooling="avg")
+                           input_shape=(IMG_SIZE, IMG_SIZE, 3), pooling="avg")
     backbone.trainable = False
 
     # preparing input and transfer learning for model
@@ -85,20 +84,27 @@ def build_transfer(augment=False):
         x = make_augmentation()(x)
 
     x = Resizing(IMG_SIZE, IMG_SIZE)(x)
-    x = Rescaling(1 / 127.5,offset=-1)(x)
-    x = backbone(x,training=False)
+    x = Rescaling(1 / 127.5, offset=-1)(x)
+    x = backbone(x, training=False)
     x = Dropout(0.2)(x)
     outputs = Dense(10, activation="softmax")(x)
 
+    return Model(inputs, outputs), backbone
 
-    return Model(inputs,outputs), backbone
 
+def enable_fine_tuning(backbone, n_last):
+    backbone.trainable = True
+    for layer in backbone.layers[: -n_last]:
+        layer.trainable = False
 
+    for layer in backbone.layers:
+        if isinstance(layer, BatchNormalization):
+            layer.trainable = False
 
 
 if __name__ == "__main__":
     model = build_cnn()
     model.summary()
 
-    mobilenet,backbone = build_transfer()
+    mobilenet, backbone = build_transfer()
     mobilenet.summary()

@@ -23,8 +23,7 @@ def count_parameters(model):
     return model.count_params(), sum_trainable
 
 
-def train(name, model, X_train, y_train, X_val, y_val, lr):
-
+def train(name, model, X_train, y_train, X_val, y_val, lr, previous_time_s=0):
     model_folder = RESULTS_DIR / name
     model_folder.mkdir(parents=True, exist_ok=True)
     model.compile(optimizer=AdamW(learning_rate=lr, weight_decay=WEIGHT_DECAY),
@@ -35,16 +34,14 @@ def train(name, model, X_train, y_train, X_val, y_val, lr):
     callbacks = [
         early_stop,
         ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=LR_PATIENCE, min_delta=0.001, min_lr=MIN_LR),
-        CSVLogger(model_folder/"history.csv"),
+        CSVLogger(model_folder / "history.csv"),
     ]
 
     before = time.perf_counter()
 
     history = model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks,
-              validation_data=(X_val, y_val))
+                        validation_data=(X_val, y_val))
     h = history.history
-
-
 
     after = time.perf_counter()
 
@@ -71,11 +68,12 @@ def train(name, model, X_train, y_train, X_val, y_val, lr):
         "time_per_epoch_s": round(train_time / epochs_run, 2),
         "total_params": int(total_params),
         "trainable_params": int(trainable_params),
+        "total_time_s": round(train_time + previous_time_s, 2)
     }
 
     with open(model_folder / "metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
 
-    plot_history(history,name,model_folder / "history.png")
+    plot_history(history, name, model_folder / "history.png")
 
     return history, metrics

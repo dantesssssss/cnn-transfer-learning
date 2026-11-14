@@ -26,7 +26,6 @@ CLASS_NAMES = np.array([
 
 RESULTS_DIR = Path("./results")
 
-
 WEIGHT_DECAY = 1e-4
 ES_PATIENCE = 8
 
