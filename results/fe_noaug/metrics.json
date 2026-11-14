@@ -1,0 +1,15 @@
+{
+  "name": "fe_noaug",
+  "epochs_run": 20,
+  "best_epoch": 12,
+  "val_loss": 0.4846900999546051,
+  "train_accuracy": 0.9355999827384949,
+  "val_accuracy": 0.8320000171661377,
+  "gap": 0.10359996557235718,
+  "loss_gap": 0.2664280831813812,
+  "train_accuracy_during_fit": 0.8998000025749207,
+  "train_time_s": 116.55,
+  "time_per_epoch_s": 5.83,
+  "total_params": 2270794,
+  "trainable_params": 12810
+}

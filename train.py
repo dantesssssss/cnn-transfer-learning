@@ -31,8 +31,9 @@ def train(name, model, X_train, y_train, X_val, y_val, lr):
                   loss=SparseCategoricalCrossentropy(),
                   metrics=['accuracy'])
 
+    early_stop = EarlyStopping(monitor='val_loss', patience=ES_PATIENCE, min_delta=0.001, restore_best_weights=True)
     callbacks = [
-        EarlyStopping(monitor='val_loss', patience=ES_PATIENCE, min_delta=0.001, restore_best_weights=True),
+        early_stop,
         ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=LR_PATIENCE, min_delta=0.001, min_lr=MIN_LR),
         CSVLogger(model_folder/"history.csv"),
     ]
@@ -54,13 +55,13 @@ def train(name, model, X_train, y_train, X_val, y_val, lr):
     val_loss, val_acc = model.evaluate(X_val, y_val, batch_size=BATCH_SIZE, verbose=0)
 
     epochs_run = len(h["loss"])
-    best = int(np.argmin(h["val_loss"]))
+    best = early_stop.best_epoch
 
     metrics = {
         "name": name,
         "epochs_run": epochs_run,
         "best_epoch": best + 1,
-        "val_loss": float(h["val_loss"][best]),
+        "val_loss": float(val_loss),
         "train_accuracy": float(train_acc),
         "val_accuracy": float(val_acc),
         "gap": float(train_acc - val_acc),

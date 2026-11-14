@@ -1,6 +1,10 @@
-from keras import Sequential, Input
+from keras import Sequential, Input, Model
 from keras.layers import RandomFlip, RandomTranslation, RandomZoom, Rescaling, Conv2D, BatchNormalization, \
     MaxPooling2D, Dropout, GlobalAveragePooling2D, Dense, ReLU
+from keras.layers import Resizing
+from keras.applications.mobilenet_v2 import MobileNetV2
+
+from config import IMG_SIZE
 
 
 def make_augmentation():
@@ -66,9 +70,35 @@ def build_cnn(augment=False):
     return model
 
 
+def build_transfer(augment=False):
+
+    # creating mobilenet_v2 without head
+    backbone = MobileNetV2(weights="imagenet", include_top=False,
+                                               input_shape=(IMG_SIZE, IMG_SIZE, 3), pooling="avg")
+    backbone.trainable = False
+
+    # preparing input and transfer learning for model
+    inputs = Input(shape=(32, 32, 3))
+    x = inputs
+
+    if augment:
+        x = make_augmentation()(x)
+
+    x = Resizing(IMG_SIZE, IMG_SIZE)(x)
+    x = Rescaling(1 / 127.5,offset=-1)(x)
+    x = backbone(x,training=False)
+    x = Dropout(0.2)(x)
+    outputs = Dense(10, activation="softmax")(x)
+
+
+    return Model(inputs,outputs), backbone
+
 
 
 
 if __name__ == "__main__":
     model = build_cnn()
     model.summary()
+
+    mobilenet,backbone = build_transfer()
+    mobilenet.summary()
