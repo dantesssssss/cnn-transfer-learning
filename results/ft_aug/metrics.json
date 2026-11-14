@@ -1,0 +1,16 @@
+{
+  "name": "ft_aug",
+  "epochs_run": 18,
+  "best_epoch": 10,
+  "val_loss": 0.46554097533226013,
+  "train_accuracy": 0.928600013256073,
+  "val_accuracy": 0.8479999899864197,
+  "gap": 0.08060002326965332,
+  "loss_gap": 0.2429526150226593,
+  "train_accuracy_during_fit": 0.8741999864578247,
+  "train_time_s": 122.23,
+  "time_per_epoch_s": 6.79,
+  "total_params": 2270794,
+  "trainable_params": 1054090,
+  "total_time_s": 268.8
+}

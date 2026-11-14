@@ -4,6 +4,6 @@
   "test_macro_f1": 0.8308921320123865,
   "worst_class": "cat",
   "worst_class_f1": 0.7035330261136713,
-  "inference_test_set_s": 10.069,
-  "inference_ms_per_image": 1.0069
+  "inference_test_set_s": 9.019,
+  "inference_ms_per_image": 0.9019
 }

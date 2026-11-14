@@ -1,0 +1,16 @@
+{
+  "name": "cnn_aug",
+  "epochs_run": 46,
+  "best_epoch": 38,
+  "val_loss": 0.9163975119590759,
+  "train_accuracy": 0.8119999766349792,
+  "val_accuracy": 0.6880000233650208,
+  "gap": 0.1239999532699585,
+  "loss_gap": 0.35897642374038696,
+  "train_accuracy_during_fit": 0.7563999891281128,
+  "train_time_s": 118.88,
+  "time_per_epoch_s": 2.58,
+  "total_params": 289642,
+  "trainable_params": 288746,
+  "total_time_s": 118.88
+}

@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+from matplotlib.ticker import FuncFormatter
 from sklearn.metrics import confusion_matrix
 
 from config import CLASS_NAMES
@@ -132,4 +134,62 @@ def plot_confusion(*, y_true, y_pred, title, path):
     print("Most common mistakes (true -> predicted):")
     for count, i, j in sorted(mistakes, reverse=True)[:5]:
         print(f"  {CLASS_NAMES[i]:>10} -> {CLASS_NAMES[j]:<10} {count}")
+    print("saved:", path)
+
+
+MODEL_LABELS = {"cnn": "Own CNN", "fe": "Feature extraction", "ft": "Fine-tuning"}
+AUGMENT_LABELS = {False: "no augmentation", True: "augmentation"}
+
+
+def _compact(value):
+    if value >= 1e6:
+        return f"{value / 1e6:.2f}M"
+    if value >= 1e3:
+        return f"{value / 1e3:.1f}K"
+    return f"{value:.0f}"
+
+
+def plot_experiment(*, rows, path):
+    panels = [
+        ("test_accuracy", "Test accuracy (%)", 100, "{:.1f}", False),
+        ("gap", "Gap: train − validation accuracy (pp)", 100, "{:.1f}", False),
+        ("total_time_s", "Training time, total (s)", 1, "{:.0f}", False),
+        ("trainable_params", "Trainable parameters (log scale)", 1, None, True),
+    ]
+    lookup = {(r["model"], r["augment"]): r for r in rows}
+    models = list(MODEL_LABELS)
+    x = np.arange(len(models))
+    width = 0.3
+
+    fig, axes = plt.subplots(2, 2, figsize=(11, 7.6))
+    for ax, (key, label, scale, fmt, log) in zip(axes.flat, panels):
+        for k, augment in enumerate((False, True)):
+            values = [scale * float(lookup[(m, augment)][key]) for m in models]
+            offset = (k - 0.5) * (width + 0.04)
+            bars = ax.bar(x + offset, values, width, color=RUN_COLORS[k])
+            for bar, value in zip(bars, values):
+                text = _compact(value) if log else fmt.format(value)
+                ax.annotate(text, (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+                            xytext=(0, 3), textcoords="offset points",
+                            ha="center", va="bottom", fontsize=8, color=MUTED)
+        if log:
+            ax.set_yscale("log")
+            ax.set_ylim(1e3, 1e7)
+            ax.yaxis.set_major_formatter(FuncFormatter(
+                lambda v, _: f"{v / 1e6:g}M" if v >= 1e6 else f"{v / 1e3:g}K" if v >= 1e3 else f"{v:g}"))
+        else:
+            ax.set_ylim(top=ax.get_ylim()[1] * 1.12)
+        ax.axhline(0, color=FAINT, linewidth=1)
+        ax.set_xticks(x, [MODEL_LABELS[m] for m in models])
+        ax.tick_params(axis="x", length=0)
+        _style(ax, "", label)
+        ax.grid(axis="x", visible=False)
+
+    handles = [Patch(color=RUN_COLORS[k], label=AUGMENT_LABELS[a]) for k, a in enumerate((False, True))]
+    fig.legend(handles=handles, loc="upper center", ncol=2, frameon=False, fontsize=10,
+               bbox_to_anchor=(0.5, 0.955))
+    fig.suptitle("Own CNN vs feature extraction vs fine-tuning, with and without augmentation")
+    fig.tight_layout(rect=(0, 0, 1, 0.93))
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
     print("saved:", path)

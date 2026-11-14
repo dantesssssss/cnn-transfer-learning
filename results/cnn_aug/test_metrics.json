@@ -1,0 +1,9 @@
+{
+  "name": "cnn_aug",
+  "test_accuracy": 0.6882,
+  "test_macro_f1": 0.685855817462855,
+  "worst_class": "cat",
+  "worst_class_f1": 0.4779220779220779,
+  "inference_test_set_s": 0.708,
+  "inference_ms_per_image": 0.0708
+}

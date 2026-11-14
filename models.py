@@ -10,8 +10,8 @@ from config import IMG_SIZE
 def make_augmentation():
     return Sequential([
         RandomFlip("horizontal"),
-        RandomTranslation(0.1, 0.1, fill_mode="reflect"),
-        RandomZoom(0.1, 0.1),
+        RandomTranslation(0.1, 0.1, fill_mode="reflect",interpolation="nearest"),
+        RandomZoom(0.1, 0.1,interpolation="nearest")
     ])
 
 

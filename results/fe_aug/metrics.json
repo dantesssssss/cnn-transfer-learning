@@ -1,0 +1,16 @@
+{
+  "name": "fe_aug",
+  "epochs_run": 24,
+  "best_epoch": 16,
+  "val_loss": 0.47810736298561096,
+  "train_accuracy": 0.9064000248908997,
+  "val_accuracy": 0.8450000286102295,
+  "gap": 0.061399996280670166,
+  "loss_gap": 0.19176506996154785,
+  "train_accuracy_during_fit": 0.8574000000953674,
+  "train_time_s": 146.57,
+  "time_per_epoch_s": 6.11,
+  "total_params": 2270794,
+  "trainable_params": 12810,
+  "total_time_s": 146.57
+}
