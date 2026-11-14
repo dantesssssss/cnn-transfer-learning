@@ -1,0 +1,15 @@
+{
+  "name": "cnn_noaug",
+  "epochs_run": 38,
+  "best_epoch": 30,
+  "val_loss": 0.9858590960502625,
+  "train_accuracy": 0.9057999849319458,
+  "val_accuracy": 0.6669999957084656,
+  "gap": 0.23879998922348022,
+  "loss_gap": 0.6308057904243469,
+  "train_accuracy_during_fit": 0.8565999865531921,
+  "train_time_s": 85.47,
+  "time_per_epoch_s": 2.25,
+  "total_params": 289642,
+  "trainable_params": 288746
+}
