@@ -1,0 +1,9 @@
+{
+  "name": "ft_noaug",
+  "test_accuracy": 0.8339,
+  "test_macro_f1": 0.8337838817741756,
+  "worst_class": "cat",
+  "worst_class_f1": 0.7075664621676891,
+  "inference_test_set_s": 10.086,
+  "inference_ms_per_image": 1.0086
+}

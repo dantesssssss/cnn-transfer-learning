@@ -8,9 +8,9 @@
   "gap": 0.11900001764297485,
   "loss_gap": 0.28887100517749786,
   "train_accuracy_during_fit": 0.9089999794960022,
-  "train_time_s": 57.52,
-  "time_per_epoch_s": 6.39,
+  "train_time_s": 64.06,
+  "time_per_epoch_s": 7.12,
   "total_params": 2270794,
   "trainable_params": 1054090,
-  "total_time_s": 170.43
+  "total_time_s": 194.71
 }
